@@ -82,7 +82,7 @@ Cette fonction nous permet donc de savoir le nombre de coté que dispose chaque 
 ## Reconnaissance de forme de couleur
 
 La dernière étape consiste à mettre en commun les deux étapes précédentes. 
-La difficulté est que l'on ne peut pas faire les étapes l'une après l'autre, je m'explique, la première pensée serai de faire la reconnaissance de couleur (respectivement de forme) puis à partir du masque obtenu faire la reconnaissance de forme (resp. de couleur) mais les masques obtenu afin de reconnaitre les couleurs ou les formes sont inutilisable pour faire l'autre reconnaissance comme nous pouvons le voir avec la première version du programme (Track.py) qui détecte n'importe quelle forme de la couleur définie.
+La difficulté est que l'on ne peut pas faire les étapes l'une après l'autre, je m'explique, la première pensée serai de faire la reconnaissance de couleur (respectivement de forme) puis à partir du masque obtenu faire la reconnaissance de forme (resp. de couleur) mais les masques obtenu afin de reconnaitre les couleurs ou les formes sont inutilisable pour faire l'autre reconnaissance comme nous pouvons le voir avec la première version du programme (Track.py) qui détecte n'importe quelle forme de la couleur définie ce qui s'observe bien avec les vidéos V1.mov et V2.mov.
 Résultat, il faut donc faire les 2 masques à partir de l'image de départ et mettre en commun les 2 listes de contours obtenues. Pour effectuer cette mise en commun, j'ai opté pour la solution qui est de faire une boucle "for" afin de travailler directement sur les contours présent dans les 2 listes et ne pas passer par une troisième liste avant de travailler sur celle-ci.
 
       for cg in contours and cntg:
@@ -109,7 +109,7 @@ Dans cette fonction nous pouvons apercevoir des variables cx et cy. Ces variable
 
 ## Conclusion
 
-Afin de conclure sur ce programme, celui-ci est capable de reconnaitre différents formes de différentes couleur tout en connaissant la position de l'objet dans l'image. Mais ce programme a des limites, en effet, selon l'intensité lumineuse présent dans la pièce, l'orientation de la lumière vis-à-vis de la direction de la webcam, il peut y avoir un contrejour ou un reflet sur l'objet ce qui change donc la perception de la couleur comme nous pouvons le voir avec la video test (test_video.mp4). La deuxième limite concerne la reconnaissance de forme puisque les contours étant défini à partir d'une approximation il se peut qu'un rectangle soit reconnu comme un pentagone si un des coins n'est pas reconnu comme à angle droit et donc la présence d'un cinquième coté aussi petit soit-il.
+Afin de conclure sur ce programme, celui-ci est capable de reconnaitre différents formes de différentes couleur tout en connaissant la position de l'objet dans l'image. Mais ce programme a des limites, en effet, selon l'intensité lumineuse présent dans la pièce, l'orientation de la lumière vis-à-vis de la direction de la webcam, il peut y avoir un contrejour ou un reflet sur l'objet ce qui change donc la perception de la couleur comme nous pouvons le voir avec les vidéos Contrejour_V1.mov et Contrejour_V2.mov en comparaison avec les vidéos V1.mov et V2.mov. La deuxième limite concerne la reconnaissance de forme puisque les contours étant défini à partir d'une approximation il se peut qu'un rectangle soit reconnu comme un pentagone si un des coins n'est pas reconnu comme à angle droit et donc la présence d'un cinquième coté aussi petit soit-il.
 
 ## Utilisation des différents codes
 
