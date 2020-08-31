@@ -71,11 +71,10 @@ while True:
     cnts=[]
     img = vs.read()
 
-    # handle the frame from VideoCapture or VideoStream
+    # on choisit la vidéo ou la webcam
     img = img[1] if args.get("video", False) else img
 
-    # if we are viewing a video and we did not grab a frame,
-    # then we have reached the end of the video
+    # si on choisit la vidéo mais qu'il n'y a pas de soucre on finit le programme
     if img is None:
         break
 
