@@ -2,6 +2,12 @@ from collections import deque
 from imutils.video import VideoStream
 import cv2
 import imutils
+import argparse
+
+ap = argparse.ArgumentParser()
+ap.add_argument("-v", "--video", help="path to the (optional) video file")
+args = vars(ap.parse_args())
+
 
 # Détermine l'intervalle de la couleur souhaité en HSV
 greenLower = (30, 70, 30)
@@ -12,7 +18,13 @@ redUpper = (189, 255, 218)
 
 pts = deque(maxlen=64)
 
-vs = VideoStream(src=0).start()  # Lance la webcam
+# Si la video n'est pas supportée ,on se réfère à la webcam
+if not args.get("video", False):
+    vs = VideoStream(src=0).start()
+
+# Sinon on prend la video
+else:
+    vs = cv2.VideoCapture(args["video"])
 
 
 # Determine la forme
@@ -58,6 +70,14 @@ def print_rectangle(img, shape, c):
 while True:
     cnts=[]
     img = vs.read()
+
+    # handle the frame from VideoCapture or VideoStream
+    img = img[1] if args.get("video", False) else img
+
+    # if we are viewing a video and we did not grab a frame,
+    # then we have reached the end of the video
+    if img is None:
+        break
 
     img = imutils.resize(img, width=600)
     blurred = cv2.GaussianBlur(img, (15, 15), 0)

@@ -3,8 +3,13 @@ from imutils.video import VideoStream
 import cv2
 import imutils
 
+import argparse
 
-greenLower = (43, 74, 35)
+ap = argparse.ArgumentParser()
+ap.add_argument("-v", "--video", help="path to the (optional) video file")
+args = vars(ap.parse_args())
+
+greenLower = (30, 70, 30)
 greenUpper = (93, 255, 255)
 
 redLower = (173, 160, 151)
@@ -12,14 +17,20 @@ redUpper = (201, 237, 200)
 
 pts = deque(maxlen=64)
 
-vs = VideoStream(src=0).start()  # Lance la webcam
+# Si la video n'est pas supportée ,on se réfère à la webcam
+if not args.get("video", False):
+    vs = VideoStream(src=0).start()
+
+# Sinon on prend la video
+else:
+    vs = cv2.VideoCapture(args["video"])
 
 
 # Determine la forme
 
 def detectshape(c):
     peri = cv2.arcLength(c, True)
-    vertices = cv2.approxPolyDP(c, 0.02 * peri, True)
+    vertices = cv2.approxPolyDP(c, 0.04 * peri, True)
     sides = len(vertices)
     shape : str = 'unknown'
     if sides == 3:
@@ -47,9 +58,21 @@ def detectshape(c):
 while True:
     img = vs.read()
 
+    # handle the frame from VideoCapture or VideoStream
+    img = img[1] if args.get("video", False) else img
+
+    # if we are viewing a video and we did not grab a frame,
+    # then we have reached the end of the video
+    if img is None:
+        break
+
     img = imutils.resize(img, width=600)
     blurred = cv2.GaussianBlur(img, (15, 15), 0)
     hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+
+    # mask1 = cv2.inRange(hsv, greenLower, greenUpper)
+    # mask1 = cv2.erode(mask1, None, iterations=2)
+    # mask1 = cv2.dilate(mask1, None, iterations=2)
 
     gray = cv2.cvtColor(blurred, cv2.COLOR_BGR2GRAY)  # Convert to grayscale image
     edged = cv2.Canny(gray, 100, 180)
@@ -60,10 +83,12 @@ while True:
         moment = cv2.moments(cnt)
         shape = detectshape(cnt)
         if shape == 'rectangle':
+
             # Construction des masques vert et rouge
             mask1 = cv2.inRange(hsv, greenLower, greenUpper)
             mask1 = cv2.erode(mask1, None, iterations=2)
             mask1 = cv2.dilate(mask1, None, iterations=2)
+            mask1 = cv2.Canny(mask1, 100, 180)
 
             mask2 = cv2.inRange(hsv, redLower, redUpper)
             mask2 = cv2.erode(mask2, None, iterations=2)
@@ -79,10 +104,13 @@ while True:
 
             for cg in cntg:
                 moment = cv2.moments(cg)
-                cx = int(moment['m10'] / moment['m00'])
-                cy = int(moment['m01'] / moment['m00'])
+                cx = 0
+                cy = 0
+                if moment['m00'] != 0:
+                    cx = int(moment['m10'] / moment['m00'])
+                    cy = int(moment['m01'] / moment['m00'])
                 cv2.drawContours(img, [cg], -1, (0, 0, 0), 2)
-                cv2.putText(img, 'rectangle vert', (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                cv2.putText(img, shape + ' vert', (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
             for cr in cntr:
                 moment = cv2.moments(cr)
