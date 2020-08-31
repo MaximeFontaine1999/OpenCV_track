@@ -11,8 +11,8 @@ Une fois ce choix effectué, j'ai dans un premier temps fait des recherche sur l
 Après plusieurs recherches, j'ai trouvé un programme (range_detector.py) qui permet de définir un masque RGB ou HSV à partir d'une photo ou directement de la webcam. Lors de mes recherches j'ai pu observé qu'il était recommandé de travailler avec les masques HSV plutôt qu'en RGB. En effet, comme nous pouvons le voir ci-dessous il est naturellement plus simple de définir un intervalle contenant une unique teinte dans différente intensité en HSV alors qu'en RGB si on veut la même teinte sous différente intensité on va récupérer des teintes que l'on ne veut pas.  
 
 
-![Alt text](https://e7.pngegg.com/pngimages/643/12/png-clipart-rgb-color-model-hsl-and-hsv-rgb-color-space-cube-cube-blue-color.png)  
-![Alt text](https://w0.pngwave.com/png/982/449/rgb-color-model-rgb-color-space-hsl-and-hsv-cube-colors-png-clip-art.png)
+![HSV](https://e7.pngegg.com/pngimages/643/12/png-clipart-rgb-color-model-hsl-and-hsv-rgb-color-space-cube-cube-blue-color.png)  
+![RGB](https://w0.pngwave.com/png/982/449/rgb-color-model-rgb-color-space-hsl-and-hsv-cube-colors-png-clip-art.png)
 
 Une fois l'intervalle définit nous pouvons donc travailler sur la reconnaissance d'objet de cette couleur. Pour cela, il faut au préalable définir les valeurs que nous avons obtenus grace au programme précédent.
     
